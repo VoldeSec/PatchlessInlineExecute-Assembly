@@ -1,5 +1,5 @@
 # PatchlessInlineExecute-Assembly
-Port of InlineExecute-Assembly to load .NET assembly in process but with **patchless AMSI and ETW bypass using hardware breakpoint**.
+Porting of InlineExecute-Assembly to load .NET assembly in process but with **patchless AMSI and ETW bypass using hardware breakpoint**.
 
 Using hardware breakpoints for patchless bypass has multiple advantages over traditional patching techniques. Firstly, it avoids using widely-known APIs such as NtProtectVirtualMemory, which are closely monitored by security solutions. Secondly, hardware breakpoints do not require any modification to the files, which could be  detected by file integrity monitoring or EDR, resulting in a relatively stealthy approach.
 

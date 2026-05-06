@@ -142,6 +142,7 @@ void insert_descriptor_entry(const uintptr_t adr, const unsigned pos, const exce
 void delete_descriptor_entry(const uintptr_t adr, const DWORD tid)
 {
 	struct descriptor_entry* temp;
+	struct descriptor_entry* next;
 	unsigned pos = 0;
 	BOOL found = FALSE;
 	KERNEL32$EnterCriticalSection(&g_critical_section);
@@ -165,7 +166,10 @@ void delete_descriptor_entry(const uintptr_t adr, const DWORD tid)
 			if (temp->prev != NULL)
 				temp->prev->next = temp->next;
 
+			next = temp->next;
 			FREE(temp);
+			temp = next;
+			continue;
 		}
 
 		temp = temp->next;
@@ -234,14 +238,16 @@ void hardware_engine_stop(PVOID handler)
 {
 	//CRITICAL_SECTION g_critical_section;
 	struct descriptor_entry* temp;
+	struct descriptor_entry* next;
 
 	KERNEL32$EnterCriticalSection(&g_critical_section);
 
 	temp = head;
 	while (temp != NULL)
 	{
+		next = temp->next;
 		delete_descriptor_entry(temp->adr, temp->tid);
-		temp = temp->next;
+		temp = next;
 	}
 
 	KERNEL32$LeaveCriticalSection(&g_critical_section);
